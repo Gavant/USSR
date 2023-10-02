@@ -16,10 +16,18 @@ export interface RenderRequestBody {
     cookies?: {name: string, value: string}[];
     options?: Options
 }
+
+export interface RenderRequestHeaders {
+    "x-prerender-host"?: string,
+    "x-query-string"?: string
+}
+
 export default class RenderRequestAdapter {
     requestBody: RenderRequestBody;
+    headers: RenderRequestHeaders;
     constructor(event: APIGatewayProxyEventV2) {
         this.requestBody = event.body as unknown as RenderRequestBody;
+        this.headers = event.headers as unknown as RenderRequestHeaders;
     }
 
     toHtmlGenerationRequest() {
@@ -27,7 +35,7 @@ export default class RenderRequestAdapter {
             url: this.requestBody.url,
             secure: this.requestBody.secure,
             cookies: this.requestBody.cookies,
-            options: this.requestBody.options
-        });
+            options: this.requestBody.options,
+        }, this.headers);
     }
 }

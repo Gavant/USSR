@@ -2,9 +2,10 @@ import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
 import RenderRequestAdapter from './adapter';
 import RenderingService from '../services/rendering-service.ts';
+import RenderRequest from '~/requests/request.ts';
 
 export default class RenderHtmlHandler {
-    request: any;
+    request: RenderRequest;
 
     constructor(event: APIGatewayProxyEventV2) {
         console.log('in RenderHtmlHandler');
