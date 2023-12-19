@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
 
-import RenderRequest from '~/requests/request';
+import RenderRequest from './request';
 
 export interface BrowserOptions {
     headless: boolean;

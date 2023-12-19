@@ -1,6 +1,7 @@
 ARG FUNCTION_DIR="/var/task/"
 
 FROM node:18.16-bullseye as build-image
+RUN apt-get update && apt-get install -y chromium
 
 # Install Dependencies
 ENV NPM_CONFIG_CACHE=/tmp/.npm
