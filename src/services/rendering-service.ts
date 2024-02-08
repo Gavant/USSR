@@ -1,6 +1,5 @@
 
 import puppeteer from 'puppeteer-core'
-import chromium from '@sparticuz/chromium';
 // import { IDLE_NETWORK } from '../constants/playwright.ts';
 // import { LaunchOptions } from 'playwright';
 import RenderRequest from './../requests/request';
@@ -22,17 +21,23 @@ export default class RenderingService {
     async render(
         renderRequest: RenderRequest,
     ) {
+        console.log("Launching Browser...");
         const browser = await this.launchBrowser();
         // const context = await browser.newContext();
+        console.log("Creating a new page...");
         const page = await browser.newPage();
+    
+        //Allow JS.
+        await page.setJavaScriptEnabled(true);
 
-        // if (renderRequest.cookies) {
-        //     await context.addCookies(renderRequest.cookies)
-        //     console.log('Cookies set');
-        // }
-
+        console.log("Grabing url...");
+        console.log(renderRequest);
         const url = destinationUrl(renderRequest)
-        await page.goto(url);
+        console.log(url);
+        console.log("Going to url.");
+        await page.goto(url, {
+            waitUntil: 'networkidle0',
+        });
         // await page.waitForLoadState(IDLE_NETWORK)
         console.log(`Puppeteer visited page located at ${url}`);
         const result = await page.content();
@@ -43,10 +48,8 @@ export default class RenderingService {
     async launchBrowser() {
 
        return await puppeteer.launch({
-        args: chromium.args,
-        defaultViewport: chromium.defaultViewport,
-        executablePath: '/usr/bin/chromium', //await chromium.executablePath(),
-        headless: chromium.headless,
+        args: ['--no-sandbox'],
+        executablePath: '/usr/bin/google-chrome-stable',
       });
     }
 }
