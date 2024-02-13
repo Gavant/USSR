@@ -1,21 +1,9 @@
 import chromium from 'chrome-aws-lambda';
-import playwright from 'playwright-core'
-import { IDLE_NETWORK } from '../constants/playwright.ts';
 import { LaunchOptions } from 'playwright';
+import playwright from 'playwright-core';
 import RenderRequest from '~/requests/request.ts';
 
-const destinationUrl = (request: RenderRequest): string => {
-    // Prioritize headers
-    if (request.headers?.['x-prerender-host']) {
-        if (request.headers?.['x-query-string']) {
-            return `${request.headers['x-prerender-host']}${request.headers['x-query-string']}`
-        }
-
-        return request.headers['x-prerender-host']
-    }
-
-    return request.url
-}
+import { IDLE_NETWORK } from '../constants/playwright.ts';
 
 export default class RenderingService {
     async render(
@@ -30,10 +18,9 @@ export default class RenderingService {
             console.log('Cookies set');
         }
 
-        const url = destinationUrl(renderRequest)
-        await page.goto(url);
+        await page.goto(renderRequest.url);
         await page.waitForLoadState(IDLE_NETWORK)
-        console.log(`Playwright visited page located at ${url}`);
+        console.log(`Playwright visited page located at ${renderRequest.url}`);
         const result = await page.content();
         await browser.close();
         return result;
