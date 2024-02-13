@@ -1,9 +1,9 @@
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, CloudFrontRequestEvent, Handler } from 'aws-lambda';
+import { CloudFrontRequestEvent, Handler } from 'aws-lambda';
 import BaseAdapter from '~/adapters/base';
 import RenderRequest, { RenderRequestCookies } from '~/requests/request';
 
 export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAdapter<T> {
-    toHtmlGenerationRequest(event: CloudFrontRequestEvent) {
+    toHtmlGenerationRequest(event: T) {
         const request = event.Records[0].cf.request;
         const url = `https://${request.headers.host[0].value}${request.uri}`;
 
@@ -19,7 +19,7 @@ export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAda
     }
 }
 
-const handler: Handler<APIGatewayProxyEventV2, APIGatewayProxyResultV2<{ url: string }>> = async (event) => {
+const handler: Handler<CloudFrontRequestEvent, string> = async (event) => {
     try {
         return CloudfrontAdapter.handler(event);
     } catch (err) {
