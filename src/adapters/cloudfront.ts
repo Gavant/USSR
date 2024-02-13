@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, CloudFrontRequestEvent, Handler } from 'aws-lambda';
 import BaseAdapter from '~/adapters/base';
-import RenderRequest, { Options, RenderRequestCookies } from '~/requests/request';
+import RenderRequest, { RenderRequestCookies } from '~/requests/request';
 
 export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAdapter<T> {
     toHtmlGenerationRequest(event: CloudFrontRequestEvent) {

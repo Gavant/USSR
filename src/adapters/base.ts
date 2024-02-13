@@ -13,7 +13,7 @@ export default class Base<T> implements BaseAdapter<T> {
         return rendered;
     }
 
-    toHtmlGenerationRequest(event: any): RenderRequest {
+    toHtmlGenerationRequest(_event: any): RenderRequest {
         throw new Error('Method not implemented.');
     }
 }

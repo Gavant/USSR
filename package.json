@@ -11,10 +11,6 @@
         ".": {
             "import": "./dist/main.js",
             "require": "./dist/main.cjs"
-        },
-        "./requests/handler": {
-            "import": "./dist/handler.js",
-            "require": "./dist/handler.cjs"
         }
     },
     "types": "./dist/main.d.ts",
