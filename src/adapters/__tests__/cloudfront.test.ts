@@ -64,12 +64,6 @@ describe('Cloudfront Adapter Functionality', async () => {
                     value: 'exampleHost',
                 },
             ],
-            cookie: [
-                {
-                    key: 'Cookie',
-                    value: 'exampleCookie',
-                },
-            ],
             'user-agent': [
                 {
                     key: 'User-Agent',

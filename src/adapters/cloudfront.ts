@@ -11,6 +11,8 @@ export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAda
 
         const headers = request.headers;
 
+        delete headers['cookie'];
+
         return new RenderRequest({
             url,
             cookies,
