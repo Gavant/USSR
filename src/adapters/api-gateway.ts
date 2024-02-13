@@ -13,38 +13,31 @@ export interface RenderRequestHeaders {
     'x-query-string'?: string;
 }
 
-export class ApiGatewayAdapter<T> extends BaseAdapter<T> {
-    requestBody: RenderRequestBody;
-    headers: RenderRequestHeaders;
-    url: string;
-
-    constructor(event: APIGatewayProxyEventV2) {
-        super();
-        this.requestBody = event.body as unknown as RenderRequestBody;
-        this.headers = event.headers;
-
-        const destinationUrl = (headers: RenderRequestHeaders, bodyUrl: string): string => {
-            // Prioritize headers
-            if (headers?.['x-prerender-host']) {
-                if (headers?.['x-query-string']) {
-                    return `${headers['x-prerender-host']}${headers['x-query-string']}`;
-                }
-
-                return headers['x-prerender-host'];
+export class ApiGatewayAdapter<T extends APIGatewayProxyEventV2> extends BaseAdapter<T> {
+    destinationUrl(headers: RenderRequestHeaders, bodyUrl: string) {
+        // Prioritize headers
+        if (headers?.['x-prerender-host']) {
+            if (headers?.['x-query-string']) {
+                return `${headers['x-prerender-host']}${headers['x-query-string']}`;
             }
 
-            return bodyUrl;
-        };
+            return headers['x-prerender-host'];
+        }
 
-        this.url = destinationUrl(this.headers, this.requestBody.url);
+        return bodyUrl;
     }
 
-    toHtmlGenerationRequest() {
+    toHtmlGenerationRequest(event: APIGatewayProxyEventV2) {
+        const requestBody = event.body as unknown as RenderRequestBody;
+        const headers = event.headers;
+
+        const url = this.destinationUrl(headers, requestBody.url);
+
         return new RenderRequest({
-            url: this.url,
-            cookies: this.requestBody.cookies,
-            options: this.requestBody.options,
-            headers: this.headers,
+            url,
+            cookies: requestBody.cookies,
+            options: requestBody.options,
+            headers,
         });
     }
 }

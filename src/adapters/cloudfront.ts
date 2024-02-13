@@ -1,33 +1,20 @@
-import {
-    APIGatewayProxyEventV2,
-    APIGatewayProxyResultV2,
-    CloudFrontHeaders,
-    CloudFrontRequestEvent,
-    Handler
-} from 'aws-lambda';
+import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, CloudFrontRequestEvent, Handler } from 'aws-lambda';
 import BaseAdapter from '~/adapters/base';
 import RenderRequest, { Options, RenderRequestCookies } from '~/requests/request';
 
-export class CloudfrontAdapter<T> extends BaseAdapter<T> {
-    url: string;
-    cookies: RenderRequestCookies;
-    headers: CloudFrontHeaders;
-
-    constructor(event: CloudFrontRequestEvent) {
-        super();
+export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAdapter<T> {
+    toHtmlGenerationRequest(event: CloudFrontRequestEvent) {
         const request = event.Records[0].cf.request;
-        this.url = `https://${request.headers.host[0].value}${request.uri}`;
+        const url = `https://${request.headers.host[0].value}${request.uri}`;
 
-        this.cookies = request.headers.cookie as RenderRequestCookies;
+        const cookies = request.headers.cookie as RenderRequestCookies;
 
-        this.headers = request.headers;
-    }
+        const headers = request.headers;
 
-    toHtmlGenerationRequest() {
         return new RenderRequest({
-            url: this.url,
-            cookies: this.cookies,
-            headers: this.headers,
+            url,
+            cookies,
+            headers,
         });
     }
 }
