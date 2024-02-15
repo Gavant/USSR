@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { RenderRequestHeaders } from '~/adapters/api-gateway';
 import RenderRequest from '~/requests/request';
 import RenderingService from '~/services/rendering-service.ts';
 
