@@ -17,7 +17,7 @@ export default defineConfig({
         },
     },
     build: {
-        ssr: true,
+        ssr: resolve(__dirname, './src/main.ts'),
         lib: {
             formats: ['es', 'cjs', 'umd'],
             // Could also be a dictionary or array of multiple entry points
