@@ -35,6 +35,7 @@
         "eslint-plugin-prettier": "^5.0.0",
         "jsdom": "^22.1.0",
         "prettier": "^3.0.3",
+        "puppeteer": "^22.1.0",
         "release-it": "^16.2.1",
         "typescript": "^5.2.2",
         "vite-plugin-dts": "^3.7.2",
@@ -49,13 +50,10 @@
         "build": "tsc && vite build",
         "clean": "rm -rf dist build",
         "ts-node": "ts-node",
-        "prepublishOnly": "yarn build",
-        "postinstall": "npx playwright install --with-deps chromium"
+        "prepublishOnly": "yarn build"
     },
     "dependencies": {
-        "chrome-aws-lambda": "^10.1.0",
-        "playwright": "^1.38.1",
-        "playwright-core": "^1.38.1",
+        "puppeteer-core": "^22.1.0",
         "typescript": "^5.2.2",
         "vite": "^4.4.9"
     },
