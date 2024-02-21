@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { RenderRequestHeaders } from '~/adapters/api-gateway';
 import RenderRequest, { RenderRequestCookies } from '~/requests/request';
-import { HTMLResult } from '~/services/__tests__/result-html.ts';
-import RenderingService from '~/services/rendering-service.ts';
+import { HTMLResult } from '~/services/__tests__/result-html';
+import RenderingService from '~/services/rendering-service';
 
 // Not quite a unit test. But wanted actual HTML rendering included in here.
 describe('A full rendering request', () => {

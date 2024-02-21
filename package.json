@@ -37,6 +37,7 @@
         "prettier": "^3.0.3",
         "release-it": "^16.2.1",
         "typescript": "^5.2.2",
+        "vite-plugin-dts": "^3.7.2",
         "vitest": "^0.34.6"
     },
     "scripts": {
@@ -54,6 +55,7 @@
     "dependencies": {
         "chrome-aws-lambda": "^10.1.0",
         "playwright": "^1.38.1",
+        "playwright-core": "^1.38.1",
         "typescript": "^5.2.2",
         "vite": "^4.4.9"
     },

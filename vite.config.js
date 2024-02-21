@@ -3,11 +3,12 @@ import { resolve } from 'path';
 
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 
 export default defineConfig({
-    plugins: [],
+    plugins: [dts({ rollupTypes: true })],
     resolve: {
         alias: {
             // eslint-disable-next-line no-undef
