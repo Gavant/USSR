@@ -1,6 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import RenderRequest from '~/requests/request';
-import RenderingService from '~/services/rendering-service';
 
 const { goto, waitForLoadState } = vi.hoisted(() => {
     return {

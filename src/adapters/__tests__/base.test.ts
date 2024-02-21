@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import BaseAdapter from '~/adapters/base';
+import BaseAdapter from '~/adapters/base.ts';
 
 class ExtendedAdapter extends BaseAdapter<unknown> {}
 

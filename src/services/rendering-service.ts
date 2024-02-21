@@ -1,6 +1,6 @@
 import { executablePath } from 'puppeteer';
 import puppeteer from 'puppeteer-core';
-import RenderRequest from '~/requests/request';
+import RenderRequest from '~/requests/request.ts';
 
 export default class RenderingService {
     async render(renderRequest: RenderRequest) {
