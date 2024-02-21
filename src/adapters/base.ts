@@ -1,5 +1,5 @@
-import RenderRequest from '~/requests/request';
-import RenderingService from '~/services/rendering-service';
+import RenderRequest from '~/requests/request.ts';
+import RenderingService from '~/services/rendering-service.ts';
 
 export default interface BaseAdapterInterface<T> {
     handler(event: T): Promise<string>;

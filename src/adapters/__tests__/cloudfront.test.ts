@@ -1,6 +1,6 @@
 import { CloudFrontRequestEvent } from 'aws-lambda';
 import { describe, expect, it } from 'vitest';
-import { CloudfrontAdapter } from '~/adapters/cloudfront';
+import { CloudfrontAdapter } from '~/adapters/cloudfront.ts';
 
 describe('Cloudfront Adapter Functionality', async () => {
     it('Passing cloudfront event gives us the correct request', async () => {

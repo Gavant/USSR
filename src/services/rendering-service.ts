@@ -1,23 +1,22 @@
-import chromium from 'chrome-aws-lambda';
-import { LaunchOptions } from 'playwright';
-import playwright from 'playwright-core';
-import RenderRequest from '~/requests/request';
-
-import { IDLE_NETWORK } from '../constants/playwright';
+import { executablePath } from 'puppeteer';
+import puppeteer from 'puppeteer-core';
+import RenderRequest from '~/requests/request.ts';
 
 export default class RenderingService {
     async render(renderRequest: RenderRequest) {
         const browser = await this.launchBrowser();
-        const context = await browser.newContext();
-        const page = await context.newPage();
+        console.log('Browser launched');
+        const page = await browser.newPage();
 
         if (renderRequest.cookies) {
-            await context.addCookies(renderRequest.cookies);
+            await page.setCookie(...renderRequest.cookies);
             console.log('Cookies set');
         }
 
         await page.goto(renderRequest.url);
-        await page.waitForLoadState(IDLE_NETWORK);
+        await page.goto(renderRequest.url, {
+            waitUntil: 'networkidle0',
+        });
         console.log(`Playwright visited page located at ${renderRequest.url}`);
         const result = await page.content();
         await browser.close();
@@ -25,13 +24,18 @@ export default class RenderingService {
     }
 
     async launchBrowser() {
-        const options: LaunchOptions = {
-            args: chromium.args,
-            executablePath: process?.env?.AWS_EXECUTION_ENV ? await chromium.executablePath : playwright.chromium.executablePath(),
-            headless: chromium.headless,
-            devtools: false,
-        };
-
-        return await playwright.chromium.launch(options);
+        return await puppeteer.launch({
+            args: ['--no-sandbox'],
+            executablePath: process?.env?.BROWSER_EXECUTABLE_PATH ? process?.env?.BROWSER_EXECUTABLE_PATH : executablePath(),
+            // executablePath: '/usr/bin/google-chrome-stable',
+            headless: true,
+        });
+        // return await chromium.puppeteer.launch({
+        //     args: chromium.args,
+        //     defaultViewport: null,
+        //     executablePath: await chromium.executablePath,
+        //     headless: false,
+        //     ignoreHTTPSErrors: true,
+        // });
     }
 }

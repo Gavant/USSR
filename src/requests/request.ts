@@ -1,5 +1,5 @@
-import { BrowserContext } from 'playwright';
-import { RenderRequestHeaders } from '~/adapters/api-gateway';
+import { Cookie } from 'puppeteer-core';
+import { RenderRequestHeaders } from '~/adapters/api-gateway.ts';
 
 export interface BrowserOptions {
     headless: boolean;
@@ -9,7 +9,7 @@ export interface Options {
     browserOptions: BrowserOptions;
 }
 
-export type RenderRequestCookies = Awaited<ReturnType<BrowserContext['cookies']>>;
+export type RenderRequestCookies = Cookie[];
 
 export interface RenderRequestProps {
     url: string;

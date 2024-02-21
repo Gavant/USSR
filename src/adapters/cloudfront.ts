@@ -1,6 +1,6 @@
 import { CloudFrontRequestEvent, Handler } from 'aws-lambda';
-import BaseAdapter from '~/adapters/base';
-import RenderRequest, { RenderRequestCookies } from '~/requests/request';
+import BaseAdapter from '~/adapters/base.ts';
+import RenderRequest, { RenderRequestCookies } from '~/requests/request.ts';
 
 export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAdapter<T> {
     toHtmlGenerationRequest(event: T) {

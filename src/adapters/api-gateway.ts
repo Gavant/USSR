@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
-import BaseAdapter from '~/adapters/base';
-import RenderRequest, { Options, RenderRequestCookies } from '~/requests/request';
+import BaseAdapter from '~/adapters/base.ts';
+import RenderRequest, { Options, RenderRequestCookies } from '~/requests/request.ts';
 
 export interface RenderRequestBody {
     url: string;
