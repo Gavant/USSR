@@ -1,19 +1,33 @@
+import { BrowserContext } from 'playwright';
+import { RenderRequestHeaders } from '~/adapters/api-gateway';
 
-import { Options, RenderRequestBody, RenderRequestHeaders } from './adapter';
+export interface BrowserOptions {
+    headless: boolean;
+}
 
-export default class RenderRequest {
+export interface Options {
+    browserOptions: BrowserOptions;
+}
+
+export type RenderRequestCookies = Awaited<ReturnType<BrowserContext['cookies']>>;
+
+export interface RenderRequestProps {
     url: string;
-    secure: boolean;
-    cookies?: {name: string, value: string}[];
-    options?: Options
-    headers?: RenderRequestHeaders
+    cookies?: RenderRequestCookies;
+    options?: Options;
+    headers?: RenderRequestHeaders;
+}
 
+export default class RenderRequest implements RenderRequestProps {
+    url: string;
+    cookies?: RenderRequestCookies;
+    options?: Options;
+    headers?: RenderRequestHeaders;
 
-    constructor(...args: [RenderRequestBody, RenderRequestHeaders?]) {
-        this.url = args?.[0]?.url;
-        this.secure = args?.[0]?.secure ?? true;
-        this.cookies = args?.[0]?.cookies;
-        this.options = args?.[0].options
-        this.headers = args?.[1] ?? {}
+    constructor(args: RenderRequestProps) {
+        this.url = args.url;
+        this.cookies = args.cookies;
+        this.options = args.options;
+        this.headers = args.headers ?? {};
     }
 }
