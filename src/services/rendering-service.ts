@@ -28,7 +28,8 @@ export default class RenderingService {
         return await puppeteer.launch({
             args: ['--no-sandbox'],
             executablePath: process?.env?.BROWSER_EXECUTABLE_PATH ? process?.env?.BROWSER_EXECUTABLE_PATH : executablePath(),
-            headless: true,
+            headless: !!process?.env?.BROWSER_HEADLESS ?? true,
+            userDataDir: process?.env?.BROWSER_USER_DATA_DIR ?? '/tmp',
         });
     }
 }
