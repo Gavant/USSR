@@ -25,8 +25,9 @@ export default class RenderingService {
     }
 
     async launchBrowser() {
+        const args = process.env.BROWSER_ARGS?.split(',') ?? ['--no-sandbox'];
         return await puppeteer.launch({
-            args: ['--no-sandbox'],
+            args,
             executablePath: process?.env?.BROWSER_EXECUTABLE_PATH ? process?.env?.BROWSER_EXECUTABLE_PATH : executablePath(),
             headless: !!process?.env?.BROWSER_HEADLESS ?? true,
             userDataDir: process?.env?.BROWSER_USER_DATA_DIR ?? '/tmp',
