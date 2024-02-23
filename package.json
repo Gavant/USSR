@@ -55,6 +55,7 @@
         "prepublishOnly": "yarn build"
     },
     "dependencies": {
+        "@sparticuz/chromium": "^122.0.0",
         "puppeteer-core": "^22.1.0",
         "typescript": "^5.2.2",
         "vite": "^4.4.9"

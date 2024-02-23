@@ -1,7 +1,7 @@
-import { executablePath } from 'puppeteer';
 import puppeteer, { PuppeteerLaunchOptions } from 'puppeteer-core';
 import { IDLE_NETWORK } from '~/constants/puppeteer';
 import RenderRequest from '~/requests/request.ts';
+import chromium from '@sparticuz/chromium';
 
 export default class RenderingService {
     async render(renderRequest: RenderRequest) {
@@ -26,9 +26,10 @@ export default class RenderingService {
 
     async launchBrowser() {
         const options = {
-            args: process.env.BROWSER_ARGS?.split(',') ?? ['--no-sandbox'],
-            executablePath: process?.env?.BROWSER_EXECUTABLE_PATH ? process?.env?.BROWSER_EXECUTABLE_PATH : executablePath(),
-            headless: !!process?.env?.BROWSER_HEADLESS === false ? false : true,
+            args: process.env.BROWSER_ARGS?.split(',') ?? chromium.args,
+            executablePath: process?.env?.BROWSER_EXECUTABLE_PATH ? process?.env?.BROWSER_EXECUTABLE_PATH : await chromium.executablePath(),
+            headless: !!process?.env?.BROWSER_HEADLESS === false ? false : chromium.headless,
+            defaultViewport: chromium.defaultViewport,
         } as PuppeteerLaunchOptions;
 
         if (process?.env?.BROWSER_USER_DATA_DIR) {
