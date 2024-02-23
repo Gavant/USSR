@@ -1,5 +1,5 @@
 import { executablePath } from 'puppeteer';
-import puppeteer from 'puppeteer-core';
+import puppeteer, { PuppeteerLaunchOptions } from 'puppeteer-core';
 import { IDLE_NETWORK } from '~/constants/puppeteer';
 import RenderRequest from '~/requests/request.ts';
 
@@ -25,12 +25,16 @@ export default class RenderingService {
     }
 
     async launchBrowser() {
-        const args = process.env.BROWSER_ARGS?.split(',') ?? ['--no-sandbox'];
-        return await puppeteer.launch({
-            args,
+        const options = {
+            args: process.env.BROWSER_ARGS?.split(',') ?? ['--no-sandbox'],
             executablePath: process?.env?.BROWSER_EXECUTABLE_PATH ? process?.env?.BROWSER_EXECUTABLE_PATH : executablePath(),
-            headless: !!process?.env?.BROWSER_HEADLESS ?? true,
-            userDataDir: process?.env?.BROWSER_USER_DATA_DIR ?? '/tmp',
-        });
+            headless: !!process?.env?.BROWSER_HEADLESS === false ? false : true,
+        } as PuppeteerLaunchOptions;
+
+        if (process?.env?.BROWSER_USER_DATA_DIR) {
+            options.userDataDir = process?.env?.BROWSER_USER_DATA_DIR;
+        }
+
+        return await puppeteer.launch(options);
     }
 }
