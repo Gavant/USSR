@@ -27,7 +27,7 @@ export default class RenderingService {
     }
 
     async launchBrowser() {
-        const chromiumPath = import.meta.env.DEV ? await chromium.executablePath : executablePath();
+        const chromiumPath = import.meta.env.DEV ? executablePath() : await chromium.executablePath;
         const options = {
             args: process.env.BROWSER_ARGS?.split(',') ?? ['--no-sandbox'],
             executablePath: chromiumPath,
