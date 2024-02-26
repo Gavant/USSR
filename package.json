@@ -35,7 +35,7 @@
         "eslint-plugin-prettier": "^5.0.0",
         "jsdom": "^22.1.0",
         "prettier": "^3.0.3",
-        "puppeteer": "^22.1.0",
+        "puppeteer": "22.3.0",
         "release-it": "^16.2.1",
         "rollup-plugin-node-polyfills": "^0.2.1",
         "rollup-plugin-polyfill-node": "^0.13.0",
@@ -55,7 +55,8 @@
         "prepublishOnly": "yarn build"
     },
     "dependencies": {
-        "puppeteer-core": "^22.1.0",
+        "@sparticuz/chromium": "122",
+        "puppeteer-core": "22.3.0",
         "typescript": "^5.2.2",
         "vite": "^4.4.9"
     },
