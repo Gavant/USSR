@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RenderRequestHeaders } from '~/adapters/api-gateway.ts';
-import RenderRequest, { RenderRequestCookies } from '~/requests/request.ts';
+import RenderRequest, { RenderRequestCookies, RenderRequestHeaders } from '~/requests/request.ts';
 import { HTMLResult } from '~/services/__tests__/result-html.ts';
 import RenderingService from '~/services/rendering-service.ts';
 
