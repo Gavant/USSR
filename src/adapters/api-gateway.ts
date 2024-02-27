@@ -1,42 +1,25 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
+import { Cookie } from 'puppeteer-core';
 import BaseAdapter from '~/adapters/base.ts';
-import RenderRequest, { Options, RenderRequestCookies } from '~/requests/request.ts';
-
-export interface RenderRequestBody {
-    url: string;
-    cookies?: RenderRequestCookies;
-    options?: Options;
-}
-
-export interface RenderRequestHeaders {
-    'x-prerender-host'?: string;
-    'x-query-string'?: string;
-}
+import RenderRequest from '~/requests/request.ts';
 
 export class ApiGatewayAdapter<T extends APIGatewayProxyEventV2> extends BaseAdapter<T> {
-    destinationUrl(headers: RenderRequestHeaders, bodyUrl: string) {
-        // Prioritize headers
-        if (headers?.['x-prerender-host']) {
-            if (headers?.['x-query-string']) {
-                return `${headers['x-prerender-host']}${headers['x-query-string']}`;
-            }
-
-            return headers['x-prerender-host'];
-        }
-
-        return bodyUrl;
-    }
-
     toHtmlGenerationRequest(event: APIGatewayProxyEventV2) {
-        const requestBody = event.body as unknown as RenderRequestBody;
         const headers = event.headers;
 
-        const url = this.destinationUrl(headers, requestBody.url);
+        let url = `https://${event.requestContext.domainName}${event.rawPath}`;
+        if (event.rawQueryString) {
+            url += `?${event.rawQueryString}`;
+        }
+        // Take a string cookie and convert it to a cookie object
+        const cookies = event.cookies?.map((cookie) => {
+            const [key, value] = cookie.split('=');
+            return { key, value } as unknown as Cookie;
+        });
 
         return new RenderRequest({
             url,
-            cookies: requestBody.cookies,
-            options: requestBody.options,
+            cookies,
             headers,
         });
     }

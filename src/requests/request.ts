@@ -1,5 +1,8 @@
 import { Cookie } from 'puppeteer-core';
-import { RenderRequestHeaders } from '~/adapters/api-gateway.ts';
+
+export interface RenderRequestHeaders {
+    [key: string]: string | undefined;
+}
 
 export interface BrowserOptions {
     headless: boolean;

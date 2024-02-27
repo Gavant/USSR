@@ -58,24 +58,10 @@ describe('Cloudfront Adapter Functionality', async () => {
         expect(request.cookies).toEqual([{ key: 'Cookie', value: 'exampleCookie' }]);
         expect(request.options).toEqual(undefined);
         expect(request.headers).toEqual({
-            host: [
-                {
-                    key: 'Host',
-                    value: 'exampleHost',
-                },
-            ],
-            'user-agent': [
-                {
-                    key: 'User-Agent',
-                    value: 'curl/7.66.0',
-                },
-            ],
-            accept: [
-                {
-                    key: 'accept',
-                    value: '*/*',
-                },
-            ],
+            host: 'exampleHost',
+            'user-agent': 'curl/7.66.0',
+            accept: '*/*',
+            cookie: 'exampleCookie',
         });
     });
 });
