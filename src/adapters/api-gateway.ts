@@ -1,42 +1,36 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
+import { Cookie } from 'puppeteer-core';
 import BaseAdapter from '~/adapters/base.ts';
-import RenderRequest, { Options, RenderRequestCookies } from '~/requests/request.ts';
+import RenderRequest from '~/requests/request.ts';
 
-export interface RenderRequestBody {
+type ApiGatewayProxyEventV2CustomBody = {
     url: string;
-    cookies?: RenderRequestCookies;
-    options?: Options;
-}
+    headers: Record<string, string>;
+    cookies: string[];
+};
 
-export interface RenderRequestHeaders {
-    'x-prerender-host'?: string;
-    'x-query-string'?: string;
-}
+type ApiGatewayProxyEventV2WithCustomBody<T> = APIGatewayProxyEventV2 & { body: T };
 
-export class ApiGatewayAdapter<T extends APIGatewayProxyEventV2> extends BaseAdapter<T> {
-    destinationUrl(headers: RenderRequestHeaders, bodyUrl: string) {
-        // Prioritize headers
-        if (headers?.['x-prerender-host']) {
-            if (headers?.['x-query-string']) {
-                return `${headers['x-prerender-host']}${headers['x-query-string']}`;
-            }
-
-            return headers['x-prerender-host'];
+export class ApiGatewayAdapter<B extends ApiGatewayProxyEventV2CustomBody, T extends APIGatewayProxyEventV2> extends BaseAdapter<T> {
+    toHtmlGenerationRequest(event: T) {
+        if (!event.body) {
+            throw new Error('Event body is missing');
         }
 
-        return bodyUrl;
-    }
+        const body = JSON.parse(event.body) as B;
+        const headers = body.headers;
 
-    toHtmlGenerationRequest(event: APIGatewayProxyEventV2) {
-        const requestBody = event.body as unknown as RenderRequestBody;
-        const headers = event.headers;
+        let url = body.url;
 
-        const url = this.destinationUrl(headers, requestBody.url);
+        // Take a string cookie and convert it to a cookie object
+        const cookies = body.cookies?.map((cookie) => {
+            const [key, value] = cookie.split('=');
+            return { key, value } as unknown as Cookie;
+        });
 
         return new RenderRequest({
             url,
-            cookies: requestBody.cookies,
-            options: requestBody.options,
+            cookies,
             headers,
         });
     }

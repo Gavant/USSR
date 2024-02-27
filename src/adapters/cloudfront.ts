@@ -1,6 +1,6 @@
 import { CloudFrontRequestEvent, Handler } from 'aws-lambda';
 import BaseAdapter from '~/adapters/base.ts';
-import RenderRequest, { RenderRequestCookies } from '~/requests/request.ts';
+import RenderRequest, { RenderRequestCookies, RenderRequestHeaders } from '~/requests/request.ts';
 
 export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAdapter<T> {
     toHtmlGenerationRequest(event: T) {
@@ -9,9 +9,10 @@ export class CloudfrontAdapter<T extends CloudFrontRequestEvent> extends BaseAda
 
         const cookies = request.headers.cookie as RenderRequestCookies;
 
-        const headers = request.headers;
-
-        delete headers['cookie'];
+        const headers = Object.keys(request.headers).reduce<RenderRequestHeaders>((acc, key) => {
+            acc[key] = request.headers[key].map((header) => header.value).join(',');
+            return acc;
+        }, {});
 
         return new RenderRequest({
             url,
