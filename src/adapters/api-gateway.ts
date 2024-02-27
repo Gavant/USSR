@@ -3,16 +3,27 @@ import { Cookie } from 'puppeteer-core';
 import BaseAdapter from '~/adapters/base.ts';
 import RenderRequest from '~/requests/request.ts';
 
-export class ApiGatewayAdapter<T extends APIGatewayProxyEventV2> extends BaseAdapter<T> {
-    toHtmlGenerationRequest(event: APIGatewayProxyEventV2) {
-        const headers = event.headers;
+type ApiGatewayProxyEventV2CustomBody = {
+    url: string;
+    headers: Record<string, string>;
+    cookies: string[];
+};
 
-        let url = `https://${event.requestContext.domainName}${event.rawPath}`;
-        if (event.rawQueryString) {
-            url += `?${event.rawQueryString}`;
+type ApiGatewayProxyEventV2WithCustomBody<T> = APIGatewayProxyEventV2 & { body: T };
+
+export class ApiGatewayAdapter<B extends ApiGatewayProxyEventV2CustomBody, T extends APIGatewayProxyEventV2> extends BaseAdapter<T> {
+    toHtmlGenerationRequest(event: T) {
+        if (!event.body) {
+            throw new Error('Event body is missing');
         }
+
+        const body = JSON.parse(event.body) as B;
+        const headers = body.headers;
+
+        let url = body.url;
+
         // Take a string cookie and convert it to a cookie object
-        const cookies = event.cookies?.map((cookie) => {
+        const cookies = body.cookies?.map((cookie) => {
             const [key, value] = cookie.split('=');
             return { key, value } as unknown as Cookie;
         });

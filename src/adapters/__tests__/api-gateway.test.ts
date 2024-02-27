@@ -57,7 +57,7 @@ describe('Cloudfront Adapter Functionality', async () => {
                 time: '12/Mar/2020:19:03:58 +0000',
                 timeEpoch: 1583348638390,
             },
-            body: 'Hello from Lambda',
+            body: '{"url":"https://test.com","headers":{"header1":"value1","header2":"value1,value2"},"cookies":["USER_TOKEN=YES"]}',
             pathParameters: {
                 parameter1: 'value1',
             },
@@ -66,19 +66,16 @@ describe('Cloudfront Adapter Functionality', async () => {
                 stageVariable1: 'value1',
                 stageVariable2: 'value2',
             },
-        } as APIGatewayProxyEventV2;
+        };
 
         const request = new ApiGatewayAdapter().toHtmlGenerationRequest(event);
 
         expect(request).toBeDefined();
-        expect(request.url).toBe(
-            'https://id.execute-api.us-east-1.amazonaws.com/my/path?parameter1=value1&parameter1=value2&parameter2=value'
-        );
+        expect(request.url).toBe('https://test.com');
         expect(request.cookies).toEqual([
-            { key: 'USER_TOKEN', value: 'Yes' },
             {
-                key: 'OTHER_TOKEN',
-                value: 'Maybe',
+                key: 'USER_TOKEN',
+                value: 'YES',
             },
         ]);
 
