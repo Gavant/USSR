@@ -9,8 +9,6 @@ type ApiGatewayProxyEventV2CustomBody = {
     cookies: string[];
 };
 
-type ApiGatewayProxyEventV2WithCustomBody<T> = APIGatewayProxyEventV2 & { body: T };
-
 export class ApiGatewayAdapter<B extends ApiGatewayProxyEventV2CustomBody, T extends APIGatewayProxyEventV2> extends BaseAdapter<T> {
     toHtmlGenerationRequest(event: T) {
         if (!event.body) {
